@@ -1,4 +1,4 @@
-import { getInput } from "../util";
+import { getInput, getSampleInput } from "../util";
 
 const words = [
   { str: "one", val: 1 },
@@ -10,55 +10,49 @@ const words = [
   { str: "seven", val: 7 },
   { str: "eight", val: 8 },
   { str: "nine", val: 9 },
+  { str: "1", val: 1 },
+  { str: "2", val: 2 },
+  { str: "3", val: 3 },
+  { str: "4", val: 4 },
+  { str: "5", val: 5 },
+  { str: "6", val: 6 },
+  { str: "7", val: 7 },
+  { str: "8", val: 8 },
+  { str: "9", val: 9 },
 ];
 
 async function partOne(): Promise<number> {
-  try {
-    const lines = await getInput(1);
+  const lines = await getInput(1);
 
-    let result = 0;
+  let result = 0;
 
-    for (const line of lines) {
-      let first = NaN;
-      let last = NaN;
-      let i = 0;
+  for (const line of lines) {
+    let first = NaN;
+    let last = NaN;
+    let i = 0;
+    let j = line.length;
 
-      while (isNaN(first)) {
-        for (const word of words) {
-          if (line.substring(i, i + word.str.length) === word.str) {
-            first = word.val;
-            break;
-          }
+    while ((isNaN(first) || isNaN(last)) && i < line.length) {
+      for (const word of words) {
+        if (isNaN(first) && line.startsWith(word.str, i)) {
+          first = word.val;
         }
-        if (isNaN(first)) {
-          first = parseInt(line[i]);
+        if (isNaN(last) && line.endsWith(word.str, j)) {
+          last = word.val;
         }
-        i++;
+        if (!isNaN(first) && !isNaN(last)) {
+          break;
+        }
       }
-
-      i = line.length - 1;
-      while (isNaN(last)) {
-        for (const word of words) {
-          if (line.substring(i - word.str.length + 1, i + 1) === word.str) {
-            last = word.val;
-            break;
-          }
-        }
-        if (isNaN(last)) {
-          last = parseInt(line[i]);
-        }
-        i--;
-      }
-
-      const num = parseInt("" + first + last);
-      result += num;
+      i++;
+      j--;
     }
 
-    return result;
-  } catch (error) {
-    console.error(error);
-    return 0;
+    const num = parseInt("" + first + last);
+    result += num;
   }
+
+  return result;
 }
 
 partOne().then(console.log);
