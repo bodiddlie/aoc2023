@@ -6,7 +6,35 @@ export function intersection<T>(first: T[], second: T[]): T[] {
 
 export async function getInput(day: number): Promise<string[]> {
   const contents = await readFile(`day${day}/day${day}-input.txt`, "utf8");
-  return contents.split("\n");
+  const lines = contents.split("\n");
+  if (lines[lines.length - 1] === "") {
+    lines.pop();
+  }
+  return lines;
+}
+
+export async function getInputPart(
+  day: number,
+  part: number,
+): Promise<string[]> {
+  const contents = await readFile(
+    `day${day}/day${day}-part${part}.txt`,
+    "utf8",
+  );
+  const lines = contents.split("\n");
+  if (lines[lines.length - 1] === "") {
+    lines.pop();
+  }
+  return lines;
+}
+
+export async function getSampleInput(day: number) {
+  const contents = await readFile(`day${day}/day${day}-sample.txt`, "utf8");
+  const lines = contents.split("\n");
+  if (lines[lines.length - 1] === "") {
+    lines.pop();
+  }
+  return lines;
 }
 
 export function range(start: number, end: number = null): number[] {
