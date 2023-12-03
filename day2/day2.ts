@@ -1,4 +1,4 @@
-import { getInputPart } from "../util";
+import { getSampleInput, getInput } from "../util";
 
 function buildGameMap(lines: string[]): Record<string, Record<string, number>> {
   const gameMap = {};
@@ -30,7 +30,7 @@ async function partOne(): Promise<number> {
   const MAX_RED = 12;
   const MAX_BLUE = 14;
 
-  const lines = await getInputPart(2, 1);
+  const lines = await getInput(2);
 
   const gameMap = buildGameMap(lines);
 
@@ -48,11 +48,10 @@ async function partOne(): Promise<number> {
 }
 
 async function partTwo(): Promise<number> {
-  const lines = await getInputPart(2, 1);
+  const lines = await getInput(2);
 
   const gameMap = buildGameMap(lines);
 
-  console.log(gameMap);
   let total = 0;
   for (const key in gameMap) {
     total += gameMap[key]["green"] * gameMap[key]["red"] * gameMap[key]["blue"];

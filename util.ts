@@ -13,21 +13,6 @@ export async function getInput(day: number): Promise<string[]> {
   return lines;
 }
 
-export async function getInputPart(
-  day: number,
-  part: number,
-): Promise<string[]> {
-  const contents = await readFile(
-    `day${day}/day${day}-part${part}.txt`,
-    "utf8",
-  );
-  const lines = contents.split("\n");
-  if (lines[lines.length - 1] === "") {
-    lines.pop();
-  }
-  return lines;
-}
-
 export async function getSampleInput(day: number) {
   const contents = await readFile(`day${day}/day${day}-sample.txt`, "utf8");
   const lines = contents.split("\n");

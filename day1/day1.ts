@@ -22,7 +22,6 @@ async function partOne(): Promise<number> {
       let first = NaN;
       let last = NaN;
       let i = 0;
-      if (line === "") continue;
 
       while (isNaN(first)) {
         for (const word of words) {
