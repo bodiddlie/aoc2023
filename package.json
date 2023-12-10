@@ -7,6 +7,11 @@
     "day1": "tsc && node dist/day1/day1.js",
     "day2": "tsc && node dist/day2/day2.js",
     "day3": "tsc && node dist/day3/day3.js",
+    "day4": "tsc && node dist/day4/day4.js",
+    "day5": "tsc && node dist/day5/day5.js",
+    "day6": "tsc && node dist/day6/day6.js",
+    "day7": "tsc && node dist/day7/day7.js",
+    "day8": "tsc && node dist/day8/day8.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
