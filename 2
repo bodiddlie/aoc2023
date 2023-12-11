@@ -1,0 +1,197 @@
+import { getSampleInput, getInput } from "../util";
+
+type Point = {
+  char: string;
+  x: number;
+  y: number;
+  distance: number;
+};
+
+function buildMap(input: string[]): [Point[][], number, number] {
+  const map: Point[][] = [];
+  let startX = 0;
+  let startY = 0;
+  for (let y = 0; y < input.length; y++) {
+    const row: Point[] = [];
+    const line = input[y];
+    for (let x = 0; x < line.length; x++) {
+      const char = line[x];
+      if (char === "S") {
+        startX = x;
+        startY = y;
+      }
+      row.push({ char, distance: 0, x, y });
+    }
+    map.push(row);
+  }
+
+  return [map, startX, startY];
+}
+
+function getAdjacentPoints(map: Point[][], at: [number, number]): Point[] {
+  const [checkX, checkY] = at;
+
+  const points: Point[] = [];
+  //check above
+  if (checkY - 1 >= 0 && map[checkY - 1][checkX]) {
+    const above = map[checkY - 1][checkX];
+    if (above.char === "F" || above.char === "|" || above.char === "7") {
+      above.distance = 1;
+      points.push(above);
+    }
+  }
+  // check below
+  if (checkY + 1 < map.length && map[checkY + 1][checkX]) {
+    const below = map[checkY + 1][checkX];
+    if (below.char === "J" || below.char === "|" || below.char === "L") {
+      below.distance = 1;
+      points.push(below);
+    }
+  }
+  //check left
+  if (checkX - 1 >= 0 && map[checkY][checkX - 1]) {
+    const left = map[checkY][checkX - 1];
+    if (left.char === "F" || left.char === "-" || left.char === "L") {
+      left.distance = 1;
+      points.push(left);
+    }
+  }
+  //check right
+  if (checkX + 1 < map[checkY].length && map[checkY][checkX + 1]) {
+    const right = map[checkY][checkX + 1];
+    if (right.char === "J" || right.char === "-" || right.char === "7") {
+      right.distance = 1;
+      points.push(right);
+    }
+  }
+
+  return points;
+}
+
+function getNextPoint(map: Point[][], at: Point, prev: Point): Point {
+  if (at.char === "|" || at.char === "J" || at.char === "L") {
+    //check above
+    const checkY = at.y - 1;
+    const checkX = at.x;
+    if (checkY !== prev.y) {
+      if (checkY >= 0 && map[checkY][checkX]) {
+        const above = map[checkY][checkX];
+        if (
+          above.char === "F" ||
+          above.char === "|" ||
+          above.char === "7" ||
+          above.char === "S"
+        ) {
+          console.log("next is above ", above);
+          above.distance = at.distance + 1;
+          return above;
+        }
+      }
+    }
+  }
+
+  if (at.char === "|" || at.char === "7" || at.char === "F") {
+    //check below
+    const checkY = at.y + 1;
+    const checkX = at.x;
+    if (checkY !== prev.y) {
+      if (checkY < map.length && map[checkY][checkX]) {
+        const below = map[checkY][checkX];
+        if (
+          below.char === "J" ||
+          below.char === "|" ||
+          below.char === "L" ||
+          below.char === "S"
+        ) {
+          console.log("next is below ", below);
+          below.distance = at.distance + 1;
+          return below;
+        }
+      }
+    }
+  }
+
+  if (at.char === "-" || at.char === "J" || at.char === "7") {
+    //check left
+    const checkY = at.y;
+    const checkX = at.x - 1;
+    if (checkX !== prev.x) {
+      if (checkX >= 0 && map[checkY][checkX]) {
+        const left = map[checkY][checkX];
+        if (
+          left.char === "F" ||
+          left.char === "-" ||
+          left.char === "L" ||
+          left.char === "S"
+        ) {
+          console.log("next is left ", left);
+          left.distance = at.distance + 1;
+          return left;
+        }
+      }
+    }
+  }
+
+  if (at.char === "-" || at.char === "F" || at.char === "L") {
+    //check right
+    const checkY = at.y;
+    const checkX = at.x + 1;
+    if (checkX !== prev.x) {
+      if (checkX < map[checkY].length && map[checkY][checkX]) {
+        const right = map[checkY][checkX];
+        if (
+          right.char === "J" ||
+          right.char === "-" ||
+          right.char === "7" ||
+          right.char === "S"
+        ) {
+          console.log("next is rigth ", right);
+          right.distance = at.distance + 1;
+          return right;
+        }
+      }
+    }
+  }
+
+  console.log("no next point found");
+}
+
+async function part1(): Promise<number> {
+  const input = await getInput(10);
+  const [map, startX, startY] = buildMap(input);
+
+  const start = map[startY][startX];
+
+  const [first, second] = getAdjacentPoints(map, [startX, startY]);
+  console.log(first, second);
+
+  let last = start;
+  let current = first;
+  let next = getNextPoint(map, current, last);
+
+  let firstDistance = 1;
+  while (!(next.x === start.x && next.y === start.y)) {
+    last = current;
+    current = next;
+    next = getNextPoint(map, current, last);
+    firstDistance++;
+  }
+
+  last = start;
+  current = second;
+  next = getNextPoint(map, current, last);
+  let secondDistance = 1;
+
+  while (!(next.x === start.x && next.y === start.y)) {
+    last = current;
+    current = next;
+    next = getNextPoint(map, current, last);
+    secondDistance++;
+  }
+
+  console.log(firstDistance, secondDistance);
+
+  return 0;
+}
+
+part1().then(console.log);
