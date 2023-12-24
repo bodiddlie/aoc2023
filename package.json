@@ -27,6 +27,7 @@
     "day21": "tsc && node dist/day21/day21.js",
     "day22": "tsc && node dist/day22/day22.js",
     "day23": "tsc && node dist/day23/day23.js",
+    "day24": "tsc && node dist/day24/day24.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
